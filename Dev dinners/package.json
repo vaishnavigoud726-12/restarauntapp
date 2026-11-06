@@ -1,0 +1,14 @@
+{
+  "name": "cravewise",
+  "version": "1.0.0",
+  "description": "CraveWise – Smart Dine-In Discovery & Restaurant Intelligence Platform",
+  "scripts": {
+    "server": "node server/server.js",
+    "client": "npm --prefix client run dev",
+    "seed": "node server/seeds/seedRunner.js",
+    "build": "npm --prefix client run build"
+  },
+  "author": "CSE MSD Squad",
+  "license": "ISC"
+}
+

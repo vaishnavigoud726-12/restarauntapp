@@ -1,0 +1,22 @@
+{
+  "name": "cravewise-server",
+  "version": "1.0.0",
+  "description": "CraveWise Backend - Smart Dine-In Discovery & Restaurant Intelligence Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seeds/seedRunner.js"
+  },
+  "keywords": ["cravewise", "dine-in", "restaurant-intelligence", "mern"],
+  "author": "CSE MSD Squad",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.9.7",
+    "morgan": "^1.10.1"
+  }
+}

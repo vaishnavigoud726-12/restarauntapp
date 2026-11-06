@@ -1,0 +1,193 @@
+{
+  "info": {
+    "name": "CRAVEWISE – API Test Suite (MSD CSE 2026)",
+    "_postman_id": "cravewise-msd-suite-2026",
+    "description": "Complete REST API collection for CraveWise: Smart Dine-In Discovery & Restaurant Intelligence Platform.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api", "type": "string" },
+    { "key": "customerToken", "value": "", "type": "string" },
+    { "key": "ownerToken", "value": "", "type": "string" },
+    { "key": "adminToken", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Customer Login (Demo)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"rahul@gmail.com\",\n  \"password\": \"customer123\",\n  \"role\": \"customer\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Restaurant Owner Login (Paradise)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"paradise@cravewise.com\",\n  \"password\": \"owner123\",\n  \"role\": \"restaurant_owner\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Super Admin Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@cravewise.com\",\n  \"password\": \"admin123\",\n  \"role\": \"super_admin\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Smart Discovery ($geoNear)",
+      "item": [
+        {
+          "name": "Nearby Restaurants (Hitec City)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/restaurants/nearby?lng=78.3846&lat=17.4486&maxDistance=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["restaurants", "nearby"],
+              "query": [
+                { "key": "lng", "value": "78.3846" },
+                { "key": "lat", "value": "17.4486" },
+                { "key": "maxDistance", "value": "25" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Compare Restaurants",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantIds\": [\"RESTAURANT_ID_1\", \"RESTAURANT_ID_2\"],\n  \"userLng\": 78.3846,\n  \"userLat\": 17.4486\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/restaurants/compare", "host": ["{{baseUrl}}"], "path": ["restaurants", "compare"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Decision Assistant ('Help Me Choose')",
+      "item": [
+        {
+          "name": "Execute 5-Factor Scoring Model",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"budget\": 500,\n  \"preferredCuisines\": [\"Hyderabadi\", \"North Indian\"],\n  \"maxDistanceKm\": 15,\n  \"minRating\": 4.0,\n  \"dietaryPreference\": \"All\",\n  \"userLat\": 17.4486,\n  \"userLng\": 78.3846\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/recommendations/help-me-choose", "host": ["{{baseUrl}}"], "path": ["recommendations", "help-me-choose"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Smart Meal Builder",
+      "item": [
+        {
+          "name": "Calculate Custom Meal Combo",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemIds\": [\"DISH_ID_1\", \"DISH_ID_2\"],\n  \"discountCode\": \"WELCOME20\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/meal-builder/calculate", "host": ["{{baseUrl}}"], "path": ["meal-builder", "calculate"] }
+          }
+        },
+        {
+          "name": "Budget Combo Optimizer Solver",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/meal-builder/budget-recommendations/RESTAURANT_ID?budget=500", "host": ["{{baseUrl}}"], "path": ["meal-builder", "budget-recommendations", "RESTAURANT_ID"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Bookings & Table Management",
+      "item": [
+        {
+          "name": "Create Reservation (Anti-Double Booking)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{customerToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"RESTAURANT_ID\",\n  \"guestCount\": 4,\n  \"bookingDate\": \"2026-11-10\",\n  \"timeSlot\": \"19:00 - 21:00\",\n  \"specialRequests\": \"Window booth seat\",\n  \"discountCode\": \"WELCOME20\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/bookings", "host": ["{{baseUrl}}"], "path": ["bookings"] }
+          }
+        },
+        {
+          "name": "Owner Arrival Check-In Verification",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{ownerToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"checkInCode\": \"4821\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/bookings/verify-checkin", "host": ["{{baseUrl}}"], "path": ["bookings", "verify-checkin"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Dining Passport & Loyalty Ledger",
+      "item": [
+        {
+          "name": "Get Customer Passport & Badges",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerToken}}" }],
+            "url": { "raw": "{{baseUrl}}/passport/summary", "host": ["{{baseUrl}}"], "path": ["passport", "summary"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Super Admin Operations",
+      "item": [
+        {
+          "name": "Platform Metrics & KPIs",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/metrics", "host": ["{{baseUrl}}"], "path": ["admin", "metrics"] }
+          }
+        }
+      ]
+    }
+  ]
+}
+
